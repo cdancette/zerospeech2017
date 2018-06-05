@@ -490,7 +490,7 @@ if __name__ == '__main__':
                     args.corpus, args.distance,
                     args.output,
                     args.normalized, ncpus=ncpus,
-                    feature_file=args.feature_file)
+                    feature_file_name=args.feature_file)
             print "returned full_score"
 
             sys.stdout.write(
