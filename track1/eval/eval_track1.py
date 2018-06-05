@@ -266,7 +266,7 @@ def makedirs(listfiles):
 
 
 def fullrun(task, data_folder, feature_folder, h5, file_sizes, corpus,
-            distance, outputdir, normalized,  doall=True, ncpus=None):
+            distance, outputdir, normalized,  doall=True, ncpus=None, feature_file_name=None):
     print("Processing task {}".format(task['section']))
 
     feature_file = os.path.join(outputdir, lookup('featurefile', task))
@@ -345,8 +345,11 @@ def fullrun(task, data_folder, feature_folder, h5, file_sizes, corpus,
             # tryremove(feature_file)
             raise
     else:
-        feature_file = os.path.join(
-            feature_folder, '{}s.h5f'.format(file_sizes))
+        if feature_file_name is not None:
+            feature_file = feature_file_name
+        else:
+            feature_file = os.path.join(
+                feature_folder, '{}s.h5f'.format(file_sizes))
 
     # computing
     try:
@@ -421,6 +424,11 @@ if __name__ == '__main__':
             'sum the cost along the DTW path. Common choice '
             ' is -n 1')
 
+    parser.add_argument(
+        '-f', '--feature-file',
+        help="path to feature file (default will be '<size>s.h5f')"
+    )
+
     # distance options are mutually exclusive
     group = parser.add_argument_group(
         'distance options').add_mutually_exclusive_group()
@@ -481,7 +489,8 @@ if __name__ == '__main__':
                     args.features, args.h5, args.file_sizes,
                     args.corpus, args.distance,
                     args.output,
-                    args.normalized, ncpus=ncpus)
+                    args.normalized, ncpus=ncpus,
+                    feature_file=args.feature_file)
             print "returned full_score"
 
             sys.stdout.write(
